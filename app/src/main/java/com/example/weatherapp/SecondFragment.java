@@ -34,8 +34,11 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String city = getArguments().getString("city");
+
+
         APIRequest output = new APIRequest();
-        String myUrl = "https://jello-backend.herokuapp.com/place/vilnius";   //String to place our result in
+        String myUrl = String.format("https://jello-backend.herokuapp.com/place/%s",city);   //String to place our result in
         String result = "<REPLACE>";   //Instantiate new instance of our class
         APIRequest getRequest = new APIRequest();   //Perform the doInBackground method, passing in our url
         try {
