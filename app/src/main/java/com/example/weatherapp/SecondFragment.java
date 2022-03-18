@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.weatherapp.databinding.FragmentSecondBinding;
 import com.example.weatherapp.Utils.APIRequest;
+import com.example.weatherapp.Utils.Forecast;
+
+import org.json.JSONException;
 
 import java.util.concurrent.ExecutionException;
 
@@ -38,7 +42,7 @@ public class SecondFragment extends Fragment {
 
 
         APIRequest output = new APIRequest();
-        String myUrl = String.format("https://jello-backend.herokuapp.com/place/%s",city);   //String to place our result in
+        String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s/long-term",city);   //String to place our result in
         String result = "<REPLACE>";   //Instantiate new instance of our class
         APIRequest getRequest = new APIRequest();   //Perform the doInBackground method, passing in our url
         try {
@@ -49,13 +53,35 @@ public class SecondFragment extends Fragment {
             e.printStackTrace();
         }
 
-        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+        Forecast forecast = null;
+        try {
+            forecast = new Forecast(result);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final TextView cityTextView = (TextView) view.findViewById(R.id.forecast_city_name);
+        cityTextView.setText(forecast.city);
+
+        final TextView conditionTextView = (TextView) view.findViewById(R.id.forecast_weather_condition);
+        conditionTextView.setText(forecast.getCurrentConditionCode());
+
+        final TextView airTemperatureTextView = (TextView) view.findViewById(R.id.forecast_temperature);
+        airTemperatureTextView.setText(String.valueOf(forecast.getCurrentAirTemperature()) + "°C");
+
+
+
+        Log.d("data", forecast.getCurrentConditionCode());
+        Log.d("data", String.valueOf(forecast.getCurrentAirTemperature()));
+        Log.d("data", result);
+
+        /*binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
-        });
+        });*/
     }
 
     @Override
