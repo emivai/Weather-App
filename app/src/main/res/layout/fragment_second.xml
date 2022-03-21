@@ -65,4 +65,44 @@
         app:layout_constraintStart_toEndOf="@+id/forecast_weather_condition_title"
         app:layout_constraintTop_toBottomOf="@+id/forecast_city_name" />
 
+    <TextView
+        android:id="@+id/forecast_wind_speed_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Wind speed (gusts):"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_temperature_title" />
+
+    <TextView
+        android:id="@+id/forecast_wind_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:text="6(9) m/s"
+        app:layout_constraintStart_toEndOf="@+id/forecast_wind_speed_title"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_temperature" />
+
+    <TextView
+        android:id="@+id/forecast_precipitation_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Precipitation:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_wind_speed_title" />
+
+    <TextView
+        android:id="@+id/forecast_precipitation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="69 mm/h"
+        app:layout_constraintStart_toEndOf="@+id/forecast_precipitation_title"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_wind_speed" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

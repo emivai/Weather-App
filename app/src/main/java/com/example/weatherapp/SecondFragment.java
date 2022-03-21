@@ -1,6 +1,7 @@
 package com.example.weatherapp;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -35,6 +37,7 @@ public class SecondFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -68,6 +71,12 @@ public class SecondFragment extends Fragment {
 
         final TextView airTemperatureTextView = (TextView) view.findViewById(R.id.forecast_temperature);
         airTemperatureTextView.setText(String.valueOf(forecast.getCurrentAirTemperature()) + "°C");
+
+        final TextView windSpeedTextView = (TextView) view.findViewById(R.id.forecast_wind_speed);
+        windSpeedTextView.setText(String.valueOf(forecast.getCurrentWindSpeed()) + "(" + String.valueOf(forecast.getCurrentWindGust()) + ") m/s");
+
+        final TextView precipitationTextView = (TextView) view.findViewById(R.id.forecast_precipitation);
+        precipitationTextView.setText(String.valueOf(forecast.getCurrentPrecipitation()) + " mm/h");
 
 
 
