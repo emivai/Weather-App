@@ -43,6 +43,15 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        binding.buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_settingsFragment);
+            }
+        });
+
+        //NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment
+
         EditText edittext = (EditText) view.findViewById(R.id.edit_text_city);
         edittext.setOnKeyListener(new View.OnKeyListener() {
             @Override
