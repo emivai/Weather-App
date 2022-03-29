@@ -37,17 +37,9 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //EditText edittext = (EditText) view.findViewById(R.id.edit_text_city);
                 Bundle bundle = new Bundle();
                 bundle.putString("city", city);
                 NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
-
-
-
-                /*EditText edittext = (EditText) view.findViewById(R.id.edit_text_city);
-
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);*/
             }
         });
 
@@ -57,8 +49,9 @@ public class FirstFragment extends Fragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction()==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     String city = edittext.getText().toString();
-                    NavHostFragment.findNavController(FirstFragment.this)
-                            .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("city", city);
+                    NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
                     return true;
                 } else {
                     city = edittext.getText().toString();
