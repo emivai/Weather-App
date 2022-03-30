@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context=".FirstFragment">
+    tools:context=".FirstFragment"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
 
     <Button
         android:id="@+id/button_first"
@@ -15,10 +17,10 @@
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.273"
+        app:layout_constraintHorizontal_bias="0.329"
         app:layout_constraintStart_toEndOf="@+id/edit_text_city"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492" />
+        app:layout_constraintVertical_bias="0.546" />
 
     <EditText
         android:id="@+id/edit_text_city"
@@ -30,13 +32,13 @@
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.554" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/weather_main_block"
         android:layout_width="352dp"
         android:layout_height="118dp"
         android:layout_marginStart="28dp"
@@ -47,24 +49,26 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/rounded_font"
         android:text="Mon, 16"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toTopOf="@+id/weather_main_block" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="10 C"
+        android:text="10 °C"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
+        android:fontFamily="@font/coco_sharp_extralight"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -76,6 +80,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/someshape"
         android:text="Today"
+        android:fontFamily="@font/rounded_font"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -87,6 +92,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/someshape"
         android:text="Tomorrow"
+        android:fontFamily="@font/rounded_font"
         app:layout_constraintStart_toEndOf="@+id/button_today"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -98,6 +104,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/someshape"
         android:text="+"
+        android:fontFamily="@font/rounded_font"
         app:layout_constraintStart_toEndOf="@+id/button_today2"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -111,5 +118,56 @@
         android:src="@drawable/ic_profile"
         app:layout_constraintStart_toEndOf="@+id/button_today3"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/buttonWeatherExpand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/ic_arrow_down"
+        app:layout_constraintBottom_toBottomOf="@+id/weather_main_block"
+        app:layout_constraintEnd_toEndOf="@+id/weather_main_block" />
+
+    <TextView
+        android:id="@+id/text_wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="Wind: 2 m/s"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/text_precipation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="Precipation: 10%"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toBottomOf="@+id/text_wind" />
+
+    <TextView
+        android:id="@+id/text_visibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="Visibility: Good"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toBottomOf="@+id/text_precipation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
