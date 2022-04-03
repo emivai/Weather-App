@@ -23,8 +23,8 @@ public class ForecastTimestamp {
     Forecast class for saving forecast data for multiple timestamps
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public ForecastTimestamp(JSONObject data) throws JSONException {
-        this.forecastTimeUTC = LocalDateTime.parse(data.getString("forecastTimeUtc"), DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
+    public ForecastTimestamp(JSONObject data, long days) throws JSONException {
+        this.forecastTimeUTC = LocalDateTime.parse(data.getString("forecastTimeUtc"), DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")).plusDays(days);
         this.conditionCode = data.getString("conditionCode");
         this.airTemperature = data.getDouble("airTemperature");
         this.windSpeed = data.getInt("windSpeed");
