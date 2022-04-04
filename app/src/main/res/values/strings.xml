@@ -12,6 +12,8 @@
     <string name="button">FETCH</string>
     <string name="back">Back</string>
     <string tools:override="true" name="mtrl_picker_confirm" description="Button text to indicate that the widget will save the user's selection [CHAR_LIMIT=16]">@android:string/ok</string>
+    <string name="selected_city">kaunas</string>
+    <string name="selected_city_default_value">palanga</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

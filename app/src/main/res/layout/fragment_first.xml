@@ -8,7 +8,6 @@
     tools:context=".FirstFragment"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="0dp">
-
     <Button
         android:id="@+id/button_first"
         android:layout_width="wrap_content"
@@ -61,14 +60,14 @@
         app:layout_constraintTop_toTopOf="@+id/weather_main_block" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:fontFamily="@font/coco_sharp_extralight"
         android:text="10 °C"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
-        android:fontFamily="@font/coco_sharp_extralight"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -79,8 +78,8 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/someshape"
-        android:text="Today"
         android:fontFamily="@font/rounded_font"
+        android:text="Today"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,8 +90,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/someshape"
-        android:text="Tomorrow"
         android:fontFamily="@font/rounded_font"
+        android:text="Tomorrow"
         app:layout_constraintStart_toEndOf="@+id/button_today"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -103,8 +102,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/someshape"
-        android:text="+"
         android:fontFamily="@font/rounded_font"
+        android:text="+"
         app:layout_constraintStart_toEndOf="@+id/button_today2"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,7 +139,7 @@
         android:textSize="22sp"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/weather_main_block"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/text_temperature" />
 
     <TextView
         android:id="@+id/text_precipation"
@@ -169,5 +168,17 @@
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/weather_main_block"
         app:layout_constraintTop_toBottomOf="@+id/text_precipation" />
+
+    <ImageButton
+        android:id="@+id/button_refresh"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="16dp"
+        android:background="#00000000"
+        android:src="@android:drawable/stat_notify_sync"
+        app:layout_constraintStart_toEndOf="@+id/button_today3"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

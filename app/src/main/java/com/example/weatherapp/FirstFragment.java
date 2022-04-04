@@ -1,9 +1,9 @@
 package com.example.weatherapp;
 
 import android.app.DatePickerDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,11 +17,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 
 import com.example.weatherapp.databinding.FragmentFirstBinding;
+
+
+import com.example.weatherapp.Utils.APIRequest;
+import com.example.weatherapp.Utils.Cache;
+import com.example.weatherapp.Utils.Forecast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +39,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import org.json.JSONException;
+
+import java.util.concurrent.ExecutionException;
+
 public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
+
+
 
     private FragmentFirstBinding binding;
     private String city;
@@ -41,6 +55,7 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
     private TextView weatherWindText;
     private TextView weatherPrecipationText;
     private TextView weatherVisibilityText;
+    private View fragmentView;
 
     @Override
     public View onCreateView(
@@ -53,6 +68,7 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         day = 0;
@@ -60,7 +76,8 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
         weatherWindText = (TextView)view.findViewById(R.id.text_wind);
         weatherVisibilityText = (TextView)view.findViewById(R.id.text_visibility);
         weatherPrecipationText = (TextView)view.findViewById(R.id.text_precipation);
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+
+        /*binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
@@ -68,7 +85,7 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
                 bundle.putLong("day", day);
                 NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
             }
-        });
+        });*/
 
         binding.buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,8 +113,15 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
         /**Today button sets day to today on click **/
         binding.buttonToday3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 showCalendar();
+            }
+        });
+
+        binding.buttonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UpdateWeatherData();
             }
         });
 
@@ -120,11 +144,12 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
                 //Matrix imageMatrix = weatherMainBlock.getImageMatrix();
                 //imageMatrix.setRotate(45);
                 //weatherMainBlock.setImageMatrix(imageMatrix);
+
                 if(blockExpanded){
                     ViewGroup.LayoutParams layoutParams = weatherMainBlock.getLayoutParams();
                     layoutParams.height -= 350;
-
                     weatherMainBlock.setLayoutParams(layoutParams);
+
                     weatherWindText.setVisibility(View.INVISIBLE);
                     weatherPrecipationText.setVisibility(View.INVISIBLE);
                     weatherVisibilityText.setVisibility(View.INVISIBLE);
@@ -145,6 +170,24 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         });
 
+        /*SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refreshLayout);
+
+        // Refresh  the layout
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.d("REFRESH", "Refreshed");
+                        // This line is important as it explicitly
+                        // refreshes only once
+                        // If "true" it implicitly refreshes forever
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );*/
+
+        UpdateWeatherData();
+
         /*
         // Load a bitmap from the drawable folder
 
@@ -163,7 +206,7 @@ image.setImageBitmap(bMapScaled);
 
         //NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment
 
-        EditText edittext = (EditText) view.findViewById(R.id.edit_text_city);
+        /*EditText edittext = (EditText) view.findViewById(R.id.edit_text_city);
         edittext.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -178,8 +221,64 @@ image.setImageBitmap(bMapScaled);
                 }
                 return false;
             }
-        });
+        });*/
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void UpdateWeatherData(){
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String defaultValue = getResources().getString(R.string.selected_city_default_value);
+        String city = sharedPref.getString(getString(R.string.selected_city), defaultValue);
+
+        APIRequest output = new APIRequest();
+        String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s/long-term",city);   //String to place our result in
+        String result = "<REPLACE>";   //Instantiate new instance of our class
+        APIRequest getRequest = new APIRequest();   //Perform the doInBackground method, passing in our url
+        try {
+            result = getRequest.execute(myUrl).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Forecast forecast = null;
+        try {
+            forecast = new Forecast(result, 0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //final TextView cityTextView = (TextView) fragmentView.findViewById(R.id.forecast_city_name);
+        //cityTextView.setText(forecast.city);
+
+        //final TextView conditionTextView = (TextView) getView().findViewById(R.id.forecast_weather_condition);
+        //conditionTextView.setText(forecast.getCurrentConditionCode());
+
+        final TextView airTemperatureTextView = (TextView) getView().findViewById(R.id.text_temperature);
+        airTemperatureTextView.setText(String.valueOf(forecast.getCurrentAirTemperature()) + " °C");
+
+        final TextView windSpeedTextView = (TextView) getView().findViewById(R.id.text_wind);
+        windSpeedTextView.setText(String.valueOf("Wind: " + forecast.getCurrentWindSpeed()) + "(" + String.valueOf(forecast.getCurrentWindGust()) + ") m/s");
+
+        final TextView precipitationTextView = (TextView) getView().findViewById(R.id.text_precipation);
+        precipitationTextView.setText(String.valueOf("Precipation: " + forecast.getCurrentPrecipitation()) + " mm/h");
+
+
+
+        Log.d("data", forecast.getCurrentConditionCode());
+        Log.d("data", String.valueOf(forecast.getCurrentAirTemperature()));
+        Log.d("data", result);
+    }
+
+    /*@RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        UpdateWeatherData();
+    }*/
 
     @Override
     public void onDestroyView() {
