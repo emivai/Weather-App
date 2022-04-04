@@ -4,18 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FirstFragment">
-
+    android:background="@drawable/gradient"
+    tools:context=".FirstFragment"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
     <Button
         android:id="@+id/button_first"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
+        android:background="@drawable/someshape"
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.329"
         app:layout_constraintStart_toEndOf="@+id/edit_text_city"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.546" />
 
     <EditText
         android:id="@+id/edit_text_city"
@@ -27,8 +31,154 @@
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.554" />
+
+    <ImageView
+        android:id="@+id/weather_main_block"
+        android:layout_width="352dp"
+        android:layout_height="118dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="68dp"
+        android:src="@drawable/someshape"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="125dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/rounded_font"
+        android:text="Mon, 16"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toTopOf="@+id/weather_main_block" />
+
+    <TextView
+        android:id="@+id/text_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="10 °C"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/button_today"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/someshape"
+        android:fontFamily="@font/rounded_font"
+        android:text="Today"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_today2"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/someshape"
+        android:fontFamily="@font/rounded_font"
+        android:text="Tomorrow"
+        app:layout_constraintStart_toEndOf="@+id/button_today"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_today3"
+        android:layout_width="45dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/someshape"
+        android:fontFamily="@font/rounded_font"
+        android:text="+"
+        app:layout_constraintStart_toEndOf="@+id/button_today2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/button_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        android:background="#00000000"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintStart_toEndOf="@+id/button_today3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/buttonWeatherExpand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/ic_arrow_down"
+        app:layout_constraintBottom_toBottomOf="@+id/weather_main_block"
+        app:layout_constraintEnd_toEndOf="@+id/weather_main_block" />
+
+    <TextView
+        android:id="@+id/text_wind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="Wind: 2 m/s"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toBottomOf="@+id/text_temperature" />
+
+    <TextView
+        android:id="@+id/text_precipation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="Precipation: 10%"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toBottomOf="@+id/text_wind" />
+
+    <TextView
+        android:id="@+id/text_visibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/coco_sharp_extralight"
+        android:text="Visibility: Good"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/weather_main_block"
+        app:layout_constraintTop_toBottomOf="@+id/text_precipation" />
+
+    <ImageButton
+        android:id="@+id/button_refresh"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="16dp"
+        android:background="#00000000"
+        android:src="@android:drawable/stat_notify_sync"
+        app:layout_constraintStart_toEndOf="@+id/button_today3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
