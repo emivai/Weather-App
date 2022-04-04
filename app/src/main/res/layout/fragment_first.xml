@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_day"
         android:layout_width="125dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -68,8 +68,8 @@
         android:text="10 °C"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/text_day"
+        app:layout_constraintTop_toBottomOf="@+id/text_day" />
 
     <Button
         android:id="@+id/button_today"

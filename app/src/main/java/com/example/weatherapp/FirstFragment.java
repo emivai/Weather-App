@@ -1,5 +1,7 @@
 package com.example.weatherapp;
 
+import static java.lang.String.valueOf;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,12 +33,12 @@ import com.example.weatherapp.Utils.APIRequest;
 import com.example.weatherapp.Utils.Cache;
 import com.example.weatherapp.Utils.Forecast;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
@@ -45,11 +47,10 @@ import java.util.concurrent.ExecutionException;
 
 public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
 
-
-
     private FragmentFirstBinding binding;
     private String city;
     private long day;
+    private Date date;
     private ImageView weatherMainBlock;
     private boolean blockExpanded;
     private TextView weatherWindText;
@@ -72,6 +73,7 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         day = 0;
+        date = new Date();
         weatherMainBlock = (ImageView)view.findViewById(R.id.weather_main_block);
         weatherWindText = (TextView)view.findViewById(R.id.text_wind);
         weatherVisibilityText = (TextView)view.findViewById(R.id.text_visibility);
@@ -99,6 +101,8 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
             @Override
             public void onClick(View view){
                 day = 0;
+                date = new Date();
+                UpdateWeatherData();
             }
         });
 
@@ -107,6 +111,12 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
             @Override
             public void onClick(View view){
                 day = 1;
+                Date dt = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(dt);
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                date = c.getTime();
+                UpdateWeatherData();
             }
         });
 
@@ -115,6 +125,7 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
             @Override
             public void onClick(View view) {
                 showCalendar();
+                UpdateWeatherData();
             }
         });
 
@@ -245,7 +256,7 @@ image.setImageBitmap(bMapScaled);
 
         Forecast forecast = null;
         try {
-            forecast = new Forecast(result, 0);
+            forecast = new Forecast(result, day);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -256,19 +267,27 @@ image.setImageBitmap(bMapScaled);
         //final TextView conditionTextView = (TextView) getView().findViewById(R.id.forecast_weather_condition);
         //conditionTextView.setText(forecast.getCurrentConditionCode());
 
+        DateFormat formatter = new SimpleDateFormat("EEEE");
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        final TextView dayTextView = (TextView) getView().findViewById(R.id.text_day);
+        String day1 = valueOf(day);
+        dayTextView.setText( formatter.format(date).substring(0,3) + ", " + day1);
+
         final TextView airTemperatureTextView = (TextView) getView().findViewById(R.id.text_temperature);
-        airTemperatureTextView.setText(String.valueOf(forecast.getCurrentAirTemperature()) + " °C");
+        airTemperatureTextView.setText(valueOf(forecast.getCurrentAirTemperature()) + " °C");
 
         final TextView windSpeedTextView = (TextView) getView().findViewById(R.id.text_wind);
-        windSpeedTextView.setText(String.valueOf("Wind: " + forecast.getCurrentWindSpeed()) + "(" + String.valueOf(forecast.getCurrentWindGust()) + ") m/s");
+        windSpeedTextView.setText(valueOf("Wind: " + forecast.getCurrentWindSpeed()) + "(" + valueOf(forecast.getCurrentWindGust()) + ") m/s");
 
         final TextView precipitationTextView = (TextView) getView().findViewById(R.id.text_precipation);
-        precipitationTextView.setText(String.valueOf("Precipation: " + forecast.getCurrentPrecipitation()) + " mm/h");
+        precipitationTextView.setText(valueOf("Precipation: " + forecast.getCurrentPrecipitation()) + " mm/h");
 
 
 
         Log.d("data", forecast.getCurrentConditionCode());
-        Log.d("data", String.valueOf(forecast.getCurrentAirTemperature()));
+        Log.d("data", valueOf(forecast.getCurrentAirTemperature()));
         Log.d("data", result);
     }
 
@@ -303,6 +322,7 @@ image.setImageBitmap(bMapScaled);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         Date date = new Date();
+        this.date = date;
         try {
             date =  formatter.parse(othr);
         } catch (ParseException e) {
