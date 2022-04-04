@@ -42,6 +42,7 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         String city = getArguments().getString("city");
+        long day = getArguments().getLong("day");
 
 
         APIRequest output = new APIRequest();
@@ -58,7 +59,7 @@ public class SecondFragment extends Fragment {
 
         Forecast forecast = null;
         try {
-            forecast = new Forecast(result);
+            forecast = new Forecast(result, day);
         } catch (JSONException e) {
             e.printStackTrace();
         }

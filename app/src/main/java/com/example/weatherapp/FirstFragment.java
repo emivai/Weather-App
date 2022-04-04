@@ -1,10 +1,8 @@
 package com.example.weatherapp;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,19 +23,33 @@ import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+
+import com.example.weatherapp.databinding.FragmentFirstBinding;
+
+
 import com.example.weatherapp.Utils.APIRequest;
 import com.example.weatherapp.Utils.Cache;
 import com.example.weatherapp.Utils.Forecast;
-import com.example.weatherapp.databinding.FragmentFirstBinding;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 
 import java.util.concurrent.ExecutionException;
 
-public class FirstFragment extends Fragment {
+public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
+
+
 
     private FragmentFirstBinding binding;
     private String city;
+    private long day;
     private ImageView weatherMainBlock;
     private boolean blockExpanded;
     private TextView weatherWindText;
@@ -58,7 +71,7 @@ public class FirstFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentView = view;
+        day = 0;
         weatherMainBlock = (ImageView)view.findViewById(R.id.weather_main_block);
         weatherWindText = (TextView)view.findViewById(R.id.text_wind);
         weatherVisibilityText = (TextView)view.findViewById(R.id.text_visibility);
@@ -69,6 +82,7 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("city", city);
+                bundle.putLong("day", day);
                 NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
             }
         });*/
@@ -80,6 +94,29 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        /**Today button sets day to today on click **/
+        binding.buttonToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                day = 0;
+            }
+        });
+
+        /** Tommorow button sets day to tommorow on click **/
+        binding.buttonToday2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                day = 1;
+            }
+        });
+
+        /**Today button sets day to today on click **/
+        binding.buttonToday3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCalendar();
+            }
+        });
 
         binding.buttonRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +167,7 @@ public class FirstFragment extends Fragment {
                 blockExpanded = !blockExpanded;
                 //weatherMainBlock.setMinimumHeight(height + 100);
             }
+
         });
 
         /*SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refreshLayout);
@@ -207,7 +245,7 @@ image.setImageBitmap(bMapScaled);
 
         Forecast forecast = null;
         try {
-            forecast = new Forecast(result);
+            forecast = new Forecast(result, 0);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -248,4 +286,30 @@ image.setImageBitmap(bMapScaled);
         binding = null;
     }
 
+    private void showCalendar(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getActivity(),
+                this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        String othr = "year" + '-' + "month" + '-' + "day";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        Date date = new Date();
+        try {
+            date =  formatter.parse(othr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long diffInMillies = Math.abs(date.getTime() - today.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        this.day = diff;
+    }
 }

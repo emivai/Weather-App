@@ -37,7 +37,7 @@ public class Forecast {
     public int currentIndex;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Forecast(String jsonString) throws JSONException {
+    public Forecast(String jsonString, long days) throws JSONException {
         //https://stackoverflow.com/questions/18899232/how-to-parse-this-json-response-in-java
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONObject place = jsonObject.getJSONObject("place");
@@ -52,7 +52,7 @@ public class Forecast {
         this.timestamps = new ArrayList<ForecastTimestamp>();
         //Parsing list of forecast timestamps
         for(int i = 0; i < forecastTimestamps.length(); i++){
-            ForecastTimestamp timestamp = new ForecastTimestamp(forecastTimestamps.getJSONObject(i));
+            ForecastTimestamp timestamp = new ForecastTimestamp(forecastTimestamps.getJSONObject(i), days);
             this.timestamps.add(timestamp);
             if(timestamp.forecastTimeUTC.compareTo(nowUTC) == -1){
                 currentIndex = i; //gets the index of the current hour timestamp
