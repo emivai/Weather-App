@@ -13,11 +13,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.example.weatherapp.databinding.FragmentFirstBinding;
 import com.example.weatherapp.databinding.FragmentSettingsBinding;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +70,8 @@ public class SettingsFragment extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -85,6 +97,37 @@ public class SettingsFragment extends Fragment {
 
             }
         });
+
+
+        updateListView(view);
+
+
+    }
+
+    public void updateListView(View view){
+        ListView listView = (ListView)view.findViewById(R.id.sportPreferenceListView);
+        List<String> sportsList = Arrays.asList(getResources().getStringArray(R.array.sports_array));
+
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_checked, sportsList);
+        listView.setAdapter(arrayAdapter);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        for (int i = 0; i < arrayAdapter.getCount(); ++i){
+            CheckedTextView textView = (CheckedTextView) arrayAdapter.getView(i, null, listView);
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            listView.setItemChecked(i, sharedPref.getBoolean(textView.getText().toString(), false));
+        }
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CheckedTextView textView = (CheckedTextView)view;
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(textView.getText().toString(), textView.isChecked());
+                editor.commit();
+            }
+        });
     }
 
     @Override
@@ -105,4 +148,5 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
 }
