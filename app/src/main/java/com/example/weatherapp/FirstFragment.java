@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
@@ -120,7 +121,7 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
             }
         });
 
-        /**Today button sets day to today on click **/
+        /** "+" Button shows calendar on click **/
         binding.buttonToday3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -305,31 +306,44 @@ image.setImageBitmap(bMapScaled);
         binding = null;
     }
 
+    //Calendar setup
     private void showCalendar(){
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getActivity(),
+                R.style.AppTheme_DatePickerDialog,
                 this,
                 Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         );
+
+        //Can't choose day earlier than today
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+        //Can choose up to a week forward from today
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, +6);
+        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+
         datePickerDialog.show();
     }
 
+    //When day selection is confirmed this method determines difference
+    //between that day and today (needed for API request)
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        String othr = "year" + '-' + "month" + '-' + "day";
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date today = new Date();
-        Date date = new Date();
-        this.date = date;
-        try {
-            date =  formatter.parse(othr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long diffInMillies = Math.abs(date.getTime() - today.getTime());
-        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        this.day = diff;
+//        String othr = "year" + '-' + "month" + '-' + "day";
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//        Date today = new Date();
+//        Date date = new Date();
+//        this.date = date;
+//        try {
+//            date =  formatter.parse(othr);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        long diffInMillies = Math.abs(date.getTime() - today.getTime());
+//        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        this.day = 2;
     }
 }
