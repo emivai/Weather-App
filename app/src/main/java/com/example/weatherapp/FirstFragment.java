@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -46,7 +48,7 @@ import org.json.JSONException;
 
 import java.util.concurrent.ExecutionException;
 
-public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSetListener{
+public class FirstFragment extends Fragment{
 
     private FragmentFirstBinding binding;
     private String city;
@@ -68,6 +70,31 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                String result = bundle.getString("bundleKey");
+                // Do something with the result
+                try {
+                    Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(result);
+                    date = date1;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Calendar cal = Calendar.getInstance();
+                Date date2 = cal.getTime();
+                long diff = date.getTime() - date2.getTime();
+                day = (int) (diff / (1000 * 60 * 60 * 24));
+                UpdateWeatherData();
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -125,8 +152,8 @@ public class FirstFragment extends Fragment implements DatePickerDialog.OnDateSe
         binding.buttonToday3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCalendar();
-                UpdateWeatherData();
+                DialogFragment newFragment = new CalendarFragment();
+                newFragment.show(getFragmentManager(), "DatePicker");
             }
         });
 
@@ -304,46 +331,5 @@ image.setImageBitmap(bMapScaled);
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    //Calendar setup
-    private void showCalendar(){
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                getActivity(),
-                R.style.AppTheme_DatePickerDialog,
-                this,
-                Calendar.getInstance().get(Calendar.YEAR),
-                Calendar.getInstance().get(Calendar.MONTH),
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        );
-
-        //Can't choose day earlier than today
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-
-        //Can choose up to a week forward from today
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, +6);
-        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-
-        datePickerDialog.show();
-    }
-
-    //When day selection is confirmed this method determines difference
-    //between that day and today (needed for API request)
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//        String othr = "year" + '-' + "month" + '-' + "day";
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//        Date today = new Date();
-//        Date date = new Date();
-//        this.date = date;
-//        try {
-//            date =  formatter.parse(othr);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        long diffInMillies = Math.abs(date.getTime() - today.getTime());
-//        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        this.day = 2;
     }
 }
