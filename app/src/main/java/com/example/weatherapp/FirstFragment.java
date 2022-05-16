@@ -12,10 +12,15 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,8 +45,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
@@ -226,6 +234,7 @@ public class FirstFragment extends Fragment{
         );*/
 
         UpdateWeatherData();
+        updateListView(view);
 
         /*
         // Load a bitmap from the drawable folder
@@ -269,6 +278,9 @@ image.setImageBitmap(bMapScaled);
         SharedPreferences.Editor editor = sharedPref.edit();
         String defaultValue = getResources().getString(R.string.selected_city_default_value);
         String city = sharedPref.getString(getString(R.string.selected_city), defaultValue);
+        if (city.length()<1){
+            city = "kaunas";
+        }
 
         APIRequest output = new APIRequest();
         String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s/long-term",city);   //String to place our result in
@@ -310,7 +322,7 @@ image.setImageBitmap(bMapScaled);
         windSpeedTextView.setText(valueOf("Wind: " + forecast.getCurrentWindSpeed()) + "(" + valueOf(forecast.getCurrentWindGust()) + ") m/s");
 
         final TextView precipitationTextView = (TextView) getView().findViewById(R.id.text_precipation);
-        precipitationTextView.setText(valueOf("Precipation: " + forecast.getCurrentPrecipitation()) + " mm/h");
+        precipitationTextView.setText(valueOf("Precipitation: " + forecast.getCurrentPrecipitation()) + " mm/h");
 
 
 
@@ -319,6 +331,31 @@ image.setImageBitmap(bMapScaled);
         Log.d("data", result);
     }
 
+    public void updateListView(View view){
+        ListView listView = (ListView)view.findViewById(R.id.sportPresentationListView);
+        List<String> sportsList = Arrays.asList(getResources().getStringArray(R.array.sports_array));
+        List<String> selectedSportList = new ArrayList<String>();
+
+        for (int i = 0; i < sportsList.size(); ++i){
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            if (sharedPref.getBoolean(sportsList.get(i), false)){
+                selectedSportList.add(sportsList.get(i));
+            }
+        }
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, selectedSportList);
+        listView.setAdapter(arrayAdapter);
+
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CheckedTextView textView = (CheckedTextView)view;
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(textView.getText().toString(), textView.isChecked());
+                editor.commit();
+            }
+        });*/
+    }
     /*@RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onResume()
