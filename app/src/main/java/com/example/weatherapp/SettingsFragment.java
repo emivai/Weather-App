@@ -82,18 +82,28 @@ public class SettingsFragment extends Fragment {
             public void onClick(View view) {
                 String newCity = mEdit.getText().toString();
 
-                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                String defaultValue = getResources().getString(R.string.selected_city_default_value);
-                editor.putString(getString(R.string.selected_city), newCity);
-                editor.apply();
+                if (newCity.length() > 1) {
+                    SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    String defaultValue = getResources().getString(R.string.selected_city_default_value);
+                    editor.putString(getString(R.string.selected_city), newCity);
+                    editor.apply();
 
-                Context context = getContext();
-                CharSequence text = "City set!";
-                int duration = Toast.LENGTH_SHORT;
+                    Context context = getContext();
+                    CharSequence text = "City set!";
+                    int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                else{
+                    Context context = getContext();
+                    CharSequence text = "Must input a city";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
 
             }
         });
