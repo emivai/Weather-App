@@ -70,6 +70,18 @@ public class Forecast {
         return this.timestamps.get(currentIndex).airTemperature;
     }
 
+    public List<SportRating> getCurrentTimestampRatings() { return this.timestamps.get(currentIndex).sportRatings; }
+
+    public String getCurrentTimestampSportRating(String sportType) {
+        ForecastTimestamp timestamp = this.timestamps.get(currentIndex);
+        for(int i = 0; i < timestamp.sportRatings.size(); i++){
+            if(timestamp.sportRatings.get(i).sportType.equals(sportType)){
+                return timestamp.sportRatings.get(i).rating;
+            }
+        }
+        return "bad";
+    }
+
     public int getCurrentWindSpeed(){
         return this.timestamps.get(currentIndex).windSpeed;
     }

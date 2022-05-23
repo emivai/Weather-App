@@ -34,6 +34,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
+import com.example.weatherapp.Utils.ForecastTimestamp;
+import com.example.weatherapp.Utils.SportRating;
 import com.example.weatherapp.databinding.FragmentFirstBinding;
 
 
@@ -100,7 +102,6 @@ public class FirstFragment extends Fragment{
                 Date date2 = cal.getTime();
                 long diff = date.getTime() - date2.getTime();
                 day = (int) (diff / (1000 * 60 * 60 * 24));
-                UpdateWeatherData();
             }
         });
     }
@@ -138,7 +139,8 @@ public class FirstFragment extends Fragment{
             public void onClick(View view){
                 day = 0;
                 date = new Date();
-                UpdateWeatherData();
+                Forecast forecast = UpdateWeatherData();
+                updateListView(view, forecast);
             }
         });
 
@@ -152,7 +154,8 @@ public class FirstFragment extends Fragment{
                 c.setTime(dt);
                 c.add(Calendar.DAY_OF_MONTH, 1);
                 date = c.getTime();
-                UpdateWeatherData();
+                Forecast forecast = UpdateWeatherData();
+                updateListView(view, forecast);
             }
         });
 
@@ -168,7 +171,8 @@ public class FirstFragment extends Fragment{
         binding.buttonRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UpdateWeatherData();
+                Forecast forecast = UpdateWeatherData();
+                updateListView(view, forecast);
             }
         });
 
@@ -233,8 +237,8 @@ public class FirstFragment extends Fragment{
                 }
         );*/
 
-        UpdateWeatherData();
-        updateListView(view);
+        Forecast forecast = UpdateWeatherData();
+        updateListView(view, forecast);
 
         /*
         // Load a bitmap from the drawable folder
@@ -273,7 +277,7 @@ image.setImageBitmap(bMapScaled);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void UpdateWeatherData(){
+    public Forecast UpdateWeatherData(){
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         String defaultValue = getResources().getString(R.string.selected_city_default_value);
@@ -283,7 +287,8 @@ image.setImageBitmap(bMapScaled);
         }
 
         APIRequest output = new APIRequest();
-        String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s/long-term",city);   //String to place our result in
+        String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s",city);   //String to place our result in
+        //String myUrl = String.format("http://localhost:8080/forecasts/%s/long-term",city);   //String to place our result in
         String result = "<REPLACE>";   //Instantiate new instance of our class
         APIRequest getRequest = new APIRequest();   //Perform the doInBackground method, passing in our url
         try {
@@ -329,21 +334,42 @@ image.setImageBitmap(bMapScaled);
         Log.d("data", forecast.getCurrentConditionCode());
         Log.d("data", valueOf(forecast.getCurrentAirTemperature()));
         Log.d("data", result);
+
+        return forecast;
     }
 
-    public void updateListView(View view){
+    public void updateListView(View view, Forecast forecast){
         ListView listView = (ListView)view.findViewById(R.id.sportPresentationListView);
+        ListView listView_moderate = (ListView)view.findViewById(R.id.sportModerateConditions);
+        ListView listView_bad = (ListView)view.findViewById(R.id.sportBadConditions);
         List<String> sportsList = Arrays.asList(getResources().getStringArray(R.array.sports_array));
         List<String> selectedSportList = new ArrayList<String>();
+
+        List<String> moderateSportsList = new ArrayList<String>();
+        List<String> badSportsList = new ArrayList<String>();
 
         for (int i = 0; i < sportsList.size(); ++i){
             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
             if (sharedPref.getBoolean(sportsList.get(i), false)){
-                selectedSportList.add(sportsList.get(i));
+                String rating = forecast.getCurrentTimestampSportRating(sportsList.get(i).toLowerCase());
+                if(rating.equals("good")){
+                    selectedSportList.add(sportsList.get(i));
+                } else if(rating.equals("moderate")){
+                    moderateSportsList.add(sportsList.get(i));
+                } else if(rating.equals("bad")){
+                    badSportsList.add(sportsList.get(i));
+                }
+
             }
         }
         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, selectedSportList);
         listView.setAdapter(arrayAdapter);
+
+        ArrayAdapter arrayAdapterModerate = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, moderateSportsList);
+        listView_moderate.setAdapter(arrayAdapterModerate);
+
+        ArrayAdapter arrayAdapterBad = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, badSportsList);
+        listView_bad.setAdapter(arrayAdapterBad);
 
         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

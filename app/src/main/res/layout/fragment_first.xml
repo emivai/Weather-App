@@ -155,25 +155,72 @@
 
     <ListView
         android:id="@+id/sportPresentationListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="326dp"
+        android:layout_height="117dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <ListView
+        android:id="@+id/sportModerateConditions"
+        android:layout_width="326dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/sportBadConditions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sportPresentationListView"
+        app:layout_constraintVertical_bias="0.586" />
+
+    <ListView
+        android:id="@+id/sportBadConditions"
+        android:layout_width="326dp"
+        android:layout_height="117dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.872" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="102dp"
-        android:layout_height="0dp"
+        android:layout_width="143dp"
+        android:layout_height="33dp"
         android:layout_marginStart="28dp"
         android:layout_marginTop="16dp"
-        android:text="Selected sports:"
+        android:text="Ideal weather for:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weather_main_block" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="186dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="12dp"
+        android:text="Acceptable weather for:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sportPresentationListView" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="186dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="24dp"
+        android:text="Bad weather for:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sportModerateConditions" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

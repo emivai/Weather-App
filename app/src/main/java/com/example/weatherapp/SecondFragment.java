@@ -46,7 +46,7 @@ public class SecondFragment extends Fragment {
 
 
         APIRequest output = new APIRequest();
-        String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s/long-term",city);   //String to place our result in
+        String myUrl = String.format("https://jello-backend.herokuapp.com/forecasts/%s",city);   //String to place our result in
         String result = "<REPLACE>";   //Instantiate new instance of our class
         APIRequest getRequest = new APIRequest();   //Perform the doInBackground method, passing in our url
         try {
