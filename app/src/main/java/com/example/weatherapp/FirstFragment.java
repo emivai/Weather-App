@@ -341,6 +341,7 @@ image.setImageBitmap(bMapScaled);
     }
 
     public void updateListView(View view, Forecast forecast){
+        view = getView();
         ListView listView = (ListView)view.findViewById(R.id.sportPresentationListView);
         ListView listView_moderate = (ListView)view.findViewById(R.id.sportModerateConditions);
         ListView listView_bad = (ListView)view.findViewById(R.id.sportBadConditions);
